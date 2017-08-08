@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">TeqniTask</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="user_type_prompt">Choose a branch</string>
+
+    <string-array name="user_type_arrays">
+        <item>Super User</item>
+        <item>Teacher</item>
+        <item>Student</item>
+    </string-array>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_super_user">SuperUserActivity</string>
+    <string name="title_activity_student">StudentActivity</string>
+</resources>
