@@ -1,8 +1,10 @@
 package com.example.prashantbhardwaj.teqnitask;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,7 +14,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -32,18 +45,13 @@ public class SuperUserActivity extends AppCompatActivity
         String name = user.get(SessionManagement.KEY_NAME);
         String username = user.get(SessionManagement.KEY_USERNAME);
 
+        final EditText etLevel1 = (EditText) findViewById(R.id.etLevel1);
+        final EditText etLevel2 = (EditText) findViewById(R.id.etLevel2);
+        final EditText etLevel3 = (EditText) findViewById(R.id.etLevel3);
+        final Button bSubmit = (Button) findViewById(R.id.bSubmit);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
       //  setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -64,6 +72,43 @@ public class SuperUserActivity extends AppCompatActivity
             tvName.setText(name);
             tvUsername.setText(username);
         }
+
+        bSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String level1 = etLevel1.getText().toString();
+                final String level2 = etLevel2.getText().toString();
+                final String level3 = etLevel3.getText().toString();
+
+                Response.Listener<String> responseListener = new Response.Listener<String>(){
+
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getBoolean("success");
+                            if (success){
+                                Toast toast = Toast.makeText(SuperUserActivity.this, "Levels updated", Toast.LENGTH_LONG);
+                                toast.show();
+
+                            } else {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(SuperUserActivity.this);
+                                builder.setMessage("Register Failed")
+                                        .setNegativeButton("Retry", null)
+                                        .create()
+                                        .show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+
+                LevelUpdateRequest levelUpdateRequest = new LevelUpdateRequest(level1, level2, level3, responseListener);
+                RequestQueue queue = Volley.newRequestQueue(SuperUserActivity.this);
+                queue.add(levelUpdateRequest);
+            }
+        });
     }
 
     @Override
