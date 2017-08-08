@@ -48,6 +48,9 @@ public class SuperUserActivity extends AppCompatActivity
         final EditText etLevel1 = (EditText) findViewById(R.id.etLevel1);
         final EditText etLevel2 = (EditText) findViewById(R.id.etLevel2);
         final EditText etLevel3 = (EditText) findViewById(R.id.etLevel3);
+        final EditText etLevel1opt = (EditText) findViewById(R.id.etLevel1opt);
+        final EditText etLevel2opt = (EditText) findViewById(R.id.etLevel2opt);
+        final EditText etLevel3opt = (EditText) findViewById(R.id.etLevel3opt);
         final Button bSubmit = (Button) findViewById(R.id.bSubmit);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -79,6 +82,9 @@ public class SuperUserActivity extends AppCompatActivity
                 final String level1 = etLevel1.getText().toString();
                 final String level2 = etLevel2.getText().toString();
                 final String level3 = etLevel3.getText().toString();
+                final String level1opt = etLevel1opt.getText().toString();
+                final String level2opt = etLevel2opt.getText().toString();
+                final String level3opt = etLevel3opt.getText().toString();
 
                 Response.Listener<String> responseListener = new Response.Listener<String>(){
 
@@ -93,7 +99,7 @@ public class SuperUserActivity extends AppCompatActivity
 
                             } else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(SuperUserActivity.this);
-                                builder.setMessage("Register Failed")
+                                builder.setMessage("Update Failed")
                                         .setNegativeButton("Retry", null)
                                         .create()
                                         .show();
@@ -104,7 +110,7 @@ public class SuperUserActivity extends AppCompatActivity
                     }
                 };
 
-                LevelUpdateRequest levelUpdateRequest = new LevelUpdateRequest(level1, level2, level3, responseListener);
+                LevelUpdateRequest levelUpdateRequest = new LevelUpdateRequest(level1, level2, level3, level1opt, level2opt, level3opt, responseListener);
                 RequestQueue queue = Volley.newRequestQueue(SuperUserActivity.this);
                 queue.add(levelUpdateRequest);
             }
