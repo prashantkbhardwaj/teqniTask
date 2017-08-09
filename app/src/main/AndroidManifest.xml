@@ -32,7 +32,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".TeacherActivity"></activity>
+        <activity android:name=".TeacherActivity" />
+        <activity android:name=".UploadActivity"></activity>
     </application>
 
 </manifest>

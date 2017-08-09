@@ -33,18 +33,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         spUserType.setOnItemSelectedListener(new CustomOnItemSelectedListener());
 
-        String colors[] = {"Red","Blue","White","Yellow","Black", "Green","Purple","Orange","Grey"};
-
-// Selection of the spinner
-        final Spinner spinner = (Spinner) findViewById(R.id.myspinner);
-
-// Application of the Array to the Spinner
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item, colors);
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
-        spinner.setAdapter(spinnerArrayAdapter);
-
-        spinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
-
 
         bRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,7 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
                 final String username = etUsername.getText().toString();
                 final String password = etPassword.getText().toString();
                 final String usertype = String.valueOf(spUserType.getSelectedItem());
-                System.out.println(String.valueOf(spinner.getSelectedItem()));
+//                System.out.println(String.valueOf(spinner.getSelectedItem()));
 
                 Response.Listener<String> responseListener = new Response.Listener<String>(){
 
