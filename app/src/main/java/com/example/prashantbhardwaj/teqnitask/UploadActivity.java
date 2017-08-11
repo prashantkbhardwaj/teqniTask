@@ -180,8 +180,8 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                         //Disimissing the progress dialog
                         loading.dismiss();
                         //Showing toast message of the response
-//                        Intent intent = new Intent(UploadActivity.this, MainActivity.class);
-//                        UploadActivity.this.startActivity(intent);
+                        Intent intent = new Intent(UploadActivity.this, TeacherActivity.class);
+                        UploadActivity.this.startActivity(intent);
                         Toast.makeText(UploadActivity.this, s , Toast.LENGTH_LONG).show();
                     }
                 },

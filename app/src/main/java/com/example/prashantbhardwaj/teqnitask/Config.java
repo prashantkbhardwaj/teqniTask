@@ -12,5 +12,10 @@ public class Config {
     public static final String KEY_LEVEL2OPT = "level2opt";
     public static final String KEY_LEVEL3 = "level3";
     public static final String KEY_LEVEL3OPT = "level3opt";
-    public static final String JSON_ARRAY = "result";
+
+    public static final String DOWNLOAD_DATA_URL = "http://www.vit5icnn2018.com/teqniHome/getData.php";
+    public static final String TAG_IMAGE_URL = "image";
+    public static final String TAG_NAME = "name";
+    public static final String TAG_DATE = "date";
+    public static final String TAG_TIME_DURATION = "timeDuration";
 }
