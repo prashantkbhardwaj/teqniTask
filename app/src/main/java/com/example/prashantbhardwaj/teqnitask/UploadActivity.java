@@ -2,9 +2,15 @@ package com.example.prashantbhardwaj.teqnitask;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +19,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -23,7 +31,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class UploadActivity extends AppCompatActivity {
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+
+public class UploadActivity extends AppCompatActivity implements View.OnClickListener{
 
     private ProgressDialog loading;
     private Button bSelect;
@@ -38,6 +52,21 @@ public class UploadActivity extends AppCompatActivity {
     private EditText etPictureName;
     private EditText etTimeDuration;
     private Button bUpload;
+    private String level1 ="";
+    private String level1opt ="";
+    private String level2 = "";
+    private String level2opt = "";
+    private String level3 = "";
+    private String level3opt = "";
+    private Bitmap bitmap;
+    private int PICK_IMAGE_REQUEST = 1;
+    private String UPLOAD_URL ="http://www.vit5icnn2018.com/teqniHome/upload.php";
+    private String KEY_IMAGE = "image";
+    private String KEY_UPLOADER = "uploader";
+    //private String KEY_SESSIONNAME = "sessionName";
+    private String KEY_PICTURENAME = "picturename";
+    private String KEY_TIMEDURATION = "timeduration";
+    private String KEY_LEVEL1 = "level1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +74,28 @@ public class UploadActivity extends AppCompatActivity {
         setContentView(R.layout.activity_upload);
 
         getData();
+
+        final RequestManagement findData;
+        String level1out;
+        findData = new RequestManagement(getApplicationContext());
+        HashMap<String, String> newData = findData.getStoredData();
+        level1out = newData.get(RequestManagement.LEVEL1IN);
+        if (level1out==null||level1out==""){
+            Intent intent = new Intent(UploadActivity.this, UploadActivity.class);
+            UploadActivity.this.startActivity(intent);
+        } else {
+            level1out = newData.get(RequestManagement.LEVEL1IN);
+        }
+
+        bSelect = (Button) findViewById(R.id.bSelect);
+        bUpload = (Button) findViewById(R.id.bUpload);
+        ivPicture = (ImageView) findViewById(R.id.ivPicture);
+        etSessionName = (EditText) findViewById(R.id.etSessionName);
+
+        bSelect.setOnClickListener(this);
+        bUpload.setOnClickListener(this);
+
+        System.out.println("outside: "+level1out);
     }
 
     private void getData() {
@@ -57,8 +108,14 @@ public class UploadActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 loading.dismiss();
                 showJSON(response);
+                final RequestManagement requestManagement;
+                requestManagement = new RequestManagement(getApplicationContext());
+                requestManagement.putData(level1);
+                //System.out.println("inside: "+level1);
             }
         },
+
+
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -71,16 +128,10 @@ public class UploadActivity extends AppCompatActivity {
     }
 
     private void showJSON(String response){
-        String level1 ="";
-        String level1opt ="";
-        String level2 = "";
-        String level2opt = "";
-        String level3 = "";
-        String level3opt = "";
         try {
+
             JSONObject jsonObject = new JSONObject(response);
             level1 = jsonObject.getString(Config.KEY_LEVEL1);
-            System.out.println(level1);
             level1opt = jsonObject.getString(Config.KEY_LEVEL1OPT);
             level2 = jsonObject.getString(Config.KEY_LEVEL2);
             level2opt = jsonObject.getString(Config.KEY_LEVEL2OPT);
@@ -118,7 +169,119 @@ public class UploadActivity extends AppCompatActivity {
         spLevel3ArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
         spLevel3.setAdapter(spLevel3ArrayAdapter);
 
+    }
 
+    public String getStringImage(Bitmap bmp){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
+    }
+    private void uploadImage(){
+        //Showing the progress dialog
+        final ProgressDialog loading = ProgressDialog.show(this,"Uploading...","Please wait...",false,false);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, UPLOAD_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        //Disimissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast message of the response
+//                        Intent intent = new Intent(UploadActivity.this, MainActivity.class);
+//                        UploadActivity.this.startActivity(intent);
+                        Toast.makeText(UploadActivity.this, s , Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //Dismissing the progress dialog
+                        loading.dismiss();
+
+                        //Showing toast
+                        Toast.makeText(UploadActivity.this, volleyError.getMessage().toString(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //Converting Bitmap to String
+                String image = getStringImage(bitmap);
+
+                //Getting Image Name
+
+                final SessionManagement session;
+                session = new SessionManagement(getApplicationContext());
+                session.checkLogin();
+
+                HashMap<String, String> user = session.getUserDetails();
+                String uploader = user.get(SessionManagement.KEY_USERNAME);
+
+                final RequestManagement findData;
+                String level1out;
+                findData = new RequestManagement(getApplicationContext());
+                HashMap<String, String> newData = findData.getStoredData();
+                level1out = newData.get(RequestManagement.LEVEL1IN);
+                if (level1out==null||level1out==""){
+                    Intent intent = new Intent(UploadActivity.this, UploadActivity.class);
+                    UploadActivity.this.startActivity(intent);
+                } else {
+                    level1out = newData.get(RequestManagement.LEVEL1IN);
+                }
+                String level1in = level1out;
+                //Creating parameters
+                Map<String,String> params = new Hashtable<>();
+
+                //Adding parameters
+                params.put(KEY_IMAGE, image);
+                params.put(KEY_UPLOADER, uploader);
+                params.put(KEY_LEVEL1, level1in);
+                //params.put(KEY_SESSIONNAME, etSessionName.getText().toString());
+                //returning parameters
+                return params;
+            }
+        };
+
+        //Creating a Request Queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        //Adding request to the queue
+        requestQueue.add(stringRequest);
+    }
+
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri filePath = data.getData();
+            try {
+                //Getting the Bitmap from Gallery
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                //Setting the Bitmap to ImageView
+                ivPicture.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if(v == bSelect){
+            showFileChooser();
+        }
+
+        if(v == bUpload){
+            uploadImage();
+        }
     }
 
 }
