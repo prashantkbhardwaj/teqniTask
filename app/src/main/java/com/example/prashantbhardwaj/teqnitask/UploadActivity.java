@@ -63,39 +63,34 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     private String UPLOAD_URL ="http://www.vit5icnn2018.com/teqniHome/upload.php";
     private String KEY_IMAGE = "image";
     private String KEY_UPLOADER = "uploader";
-    //private String KEY_SESSIONNAME = "sessionName";
+    private String KEY_SESSIONNAME = "sessionname";
     private String KEY_PICTURENAME = "picturename";
     private String KEY_TIMEDURATION = "timeduration";
     private String KEY_LEVEL1 = "level1";
+    private String KEY_LEVEL2 = "level2";
+    private String KEY_LEVEL3 = "level3";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
 
-        getData();
-
-        final RequestManagement findData;
-        String level1out;
-        findData = new RequestManagement(getApplicationContext());
-        HashMap<String, String> newData = findData.getStoredData();
-        level1out = newData.get(RequestManagement.LEVEL1IN);
-        if (level1out==null||level1out==""){
-            Intent intent = new Intent(UploadActivity.this, UploadActivity.class);
-            UploadActivity.this.startActivity(intent);
-        } else {
-            level1out = newData.get(RequestManagement.LEVEL1IN);
-        }
+        spLevel1 = (Spinner) findViewById(R.id.spLevel1);
+        spLevel2 = (Spinner) findViewById(R.id.spLevel2);
+        spLevel3 = (Spinner) findViewById(R.id.spLevel3);
 
         bSelect = (Button) findViewById(R.id.bSelect);
         bUpload = (Button) findViewById(R.id.bUpload);
         ivPicture = (ImageView) findViewById(R.id.ivPicture);
         etSessionName = (EditText) findViewById(R.id.etSessionName);
+        etPictureName = (EditText) findViewById(R.id.etPictureName);
+        etTimeDuration = (EditText) findViewById(R.id.etTimeDuration);
+
+        getData();
 
         bSelect.setOnClickListener(this);
         bUpload.setOnClickListener(this);
 
-        System.out.println("outside: "+level1out);
     }
 
     private void getData() {
@@ -145,9 +140,6 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         String[] level2List = level2opt.toString().split(",");
         String[] level3List = level3opt.toString().split(",");
 
-        spLevel1 = (Spinner) findViewById(R.id.spLevel1);
-        spLevel2 = (Spinner) findViewById(R.id.spLevel2);
-        spLevel3 = (Spinner) findViewById(R.id.spLevel3);
 
         tvLevel1 = (TextView) findViewById(R.id.tvLevel1);
         tvLevel2 = (TextView) findViewById(R.id.tvLevel2);
@@ -217,26 +209,19 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                 HashMap<String, String> user = session.getUserDetails();
                 String uploader = user.get(SessionManagement.KEY_USERNAME);
 
-                final RequestManagement findData;
-                String level1out;
-                findData = new RequestManagement(getApplicationContext());
-                HashMap<String, String> newData = findData.getStoredData();
-                level1out = newData.get(RequestManagement.LEVEL1IN);
-                if (level1out==null||level1out==""){
-                    Intent intent = new Intent(UploadActivity.this, UploadActivity.class);
-                    UploadActivity.this.startActivity(intent);
-                } else {
-                    level1out = newData.get(RequestManagement.LEVEL1IN);
-                }
-                String level1in = level1out;
                 //Creating parameters
                 Map<String,String> params = new Hashtable<>();
 
                 //Adding parameters
                 params.put(KEY_IMAGE, image);
                 params.put(KEY_UPLOADER, uploader);
-                params.put(KEY_LEVEL1, level1in);
-                //params.put(KEY_SESSIONNAME, etSessionName.getText().toString());
+                params.put(KEY_LEVEL1, String.valueOf(spLevel1.getSelectedItem()));
+                params.put(KEY_LEVEL2, String.valueOf(spLevel2.getSelectedItem()));
+                params.put(KEY_LEVEL3, String.valueOf(spLevel3.getSelectedItem()));
+                params.put(KEY_PICTURENAME, etPictureName.getText().toString());
+                params.put(KEY_SESSIONNAME, etSessionName.getText().toString());
+                System.out.println(etSessionName.getText().toString());
+                params.put(KEY_TIMEDURATION, etTimeDuration.getText().toString());
                 //returning parameters
                 return params;
             }
