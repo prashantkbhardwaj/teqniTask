@@ -1,10 +1,14 @@
 package com.example.prashantbhardwaj.teqnitask;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +36,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -70,6 +77,9 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     private String KEY_LEVEL2 = "level2";
     private String KEY_LEVEL3 = "level3";
 
+    private int REQUEST_CAMERA = 0;
+    private String userChoosenTask;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +102,24 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         bUpload.setOnClickListener(this);
 
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case Utility.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if(userChoosenTask.equals("Take Photo")) {
+                        cameraIntent();
+                    }
+                    else {
+                        //code for deny
+                    }
+                }
+                break;
+        }
+    }
+
+
 
     private void getData() {
         loading = ProgressDialog.show(this,"Please wait...","Fetching...",false,false);
@@ -170,6 +198,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
     }
+
     private void uploadImage(){
         //Showing the progress dialog
         final ProgressDialog loading = ProgressDialog.show(this,"Uploading...","Please wait...",false,false);
@@ -240,6 +269,38 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
+
+    private void optionChooser(){
+        final CharSequence[] items = {
+                "Camera", "Gallery"
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Make your selection");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                // Do something with the selection
+               // bSelect.setText(items[item]);
+                boolean result=Utility.checkPermission(UploadActivity.this);
+                if (items[item].equals("Gallery")){
+                    showFileChooser();
+                } else if (items[item].equals("Camera")){
+                    userChoosenTask ="Take Photo";
+                    if(result)
+                        cameraIntent();
+                }
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void cameraIntent()
+    {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQUEST_CAMERA);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -255,13 +316,38 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                 e.printStackTrace();
             }
         }
+
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CAMERA)
+                bitmap = (Bitmap) data.getExtras().get("data");
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+
+                File destination = new File(Environment.getExternalStorageDirectory(),
+                        System.currentTimeMillis() + ".jpg");
+
+                FileOutputStream fo;
+                try {
+                    destination.createNewFile();
+                    fo = new FileOutputStream(destination);
+                    fo.write(bytes.toByteArray());
+                    fo.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                ivPicture.setImageBitmap(bitmap);
+        }
     }
+
 
     @Override
     public void onClick(View v) {
 
         if(v == bSelect){
-            showFileChooser();
+            optionChooser();
+            //showFileChooser();
         }
 
         if(v == bUpload){
