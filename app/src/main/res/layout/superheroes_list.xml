@@ -73,6 +73,12 @@
 
                 </TableRow>
             </TableLayout>
+
+            <TextView
+                android:id="@+id/tvTag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="tag" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 

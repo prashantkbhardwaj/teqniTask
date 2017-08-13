@@ -50,6 +50,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
         holder.textViewName.setText(superHero.getName());
         holder.textViewDate.setText(String.valueOf(superHero.getDate()));
         holder.textViewTimeDuration.setText(superHero.getTimeDuration());
+        holder.tvTag.setText(superHero.getTag());
     }
 
     @Override
@@ -62,6 +63,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
         public TextView textViewName;
         public TextView textViewDate;
         public TextView textViewTimeDuration;
+        public TextView tvTag;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -69,6 +71,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
             textViewName = (TextView) itemView.findViewById(R.id.textViewName);
             textViewDate= (TextView) itemView.findViewById(R.id.textViewDate);
             textViewTimeDuration= (TextView) itemView.findViewById(R.id.textViewTimeDuration);
+            tvTag = (TextView) itemView.findViewById(R.id.tvTag);
         }
     }
 }

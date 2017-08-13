@@ -139,6 +139,7 @@ public class TeacherActivity extends AppCompatActivity
                 superHero.setName(json.getString(Config.TAG_NAME));
                 superHero.setDate(json.getString(Config.TAG_DATE));
                 superHero.setTimeDuration(json.getString(Config.TAG_TIME_DURATION));
+                superHero.setTag(json.getString(Config.TAG_TAG));
                 ArrayList<String> powers = new ArrayList<String>();
 
             } catch (JSONException e) {

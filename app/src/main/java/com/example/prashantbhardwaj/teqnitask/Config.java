@@ -18,4 +18,5 @@ public class Config {
     public static final String TAG_NAME = "name";
     public static final String TAG_DATE = "date";
     public static final String TAG_TIME_DURATION = "timeDuration";
+    public static final String TAG_TAG = "tag";
 }

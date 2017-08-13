@@ -9,6 +9,7 @@ public class SuperHeroes {
     private String name;
     private String date;
     private String timeDuration;
+    private String tag;
 
     //Getters and Setters
     public String getImageUrl() {
@@ -42,4 +43,8 @@ public class SuperHeroes {
     public void setTimeDuration(String timeDuration) {
         this.timeDuration = timeDuration;
     }
+
+    public String getTag(){ return tag; }
+
+    public void setTag(String tag) { this.tag = tag; }
 }
