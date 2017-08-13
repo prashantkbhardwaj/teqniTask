@@ -76,6 +76,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     private String KEY_LEVEL1 = "level1";
     private String KEY_LEVEL2 = "level2";
     private String KEY_LEVEL3 = "level3";
+    private String KEY_QRCODE = "qrcode";
 
     private int REQUEST_CAMERA = 0;
     private String userChoosenTask;
@@ -237,6 +238,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
                 HashMap<String, String> user = session.getUserDetails();
                 String uploader = user.get(SessionManagement.KEY_USERNAME);
+                String qrurl = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data="+String.valueOf(spLevel1.getSelectedItem())+"_"+String.valueOf(spLevel2.getSelectedItem())+"_"+String.valueOf(spLevel3.getSelectedItem())+"_"+etSessionName.getText().toString();
 
                 //Creating parameters
                 Map<String,String> params = new Hashtable<>();
@@ -249,8 +251,8 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                 params.put(KEY_LEVEL3, String.valueOf(spLevel3.getSelectedItem()));
                 params.put(KEY_PICTURENAME, etPictureName.getText().toString());
                 params.put(KEY_SESSIONNAME, etSessionName.getText().toString());
-                System.out.println(etSessionName.getText().toString());
                 params.put(KEY_TIMEDURATION, etTimeDuration.getText().toString());
+                params.put(KEY_QRCODE, qrurl);
                 //returning parameters
                 return params;
             }
