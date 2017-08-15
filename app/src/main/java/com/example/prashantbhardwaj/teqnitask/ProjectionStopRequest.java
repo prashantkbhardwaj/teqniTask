@@ -11,7 +11,7 @@ import java.util.Map;
  */
 
 public class ProjectionStopRequest extends StringRequest {
-    private static final String PROJECTION_REQUEST_URL = "http://www.vit5icnn2018.com/teqniHome/stopState.php";
+    private static final String PROJECTION_REQUEST_URL = "http://192.168.1.101/fileTransfers/teqniHome/stopState.php";
     private Map<String, String> params;
 
     public ProjectionStopRequest(String data, Response.Listener<String> listener){

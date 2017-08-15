@@ -11,7 +11,7 @@ import java.util.Map;
  */
 
 public class RegisterRequest extends StringRequest {
-    private static final String REGISTER_REQUEST_URL = "http://www.vit5icnn2018.com/teqniHome/register.php";
+    private static final String REGISTER_REQUEST_URL = "http://192.168.1.101/fileTransfers/teqniHome/register.php";
     private Map<String, String> params;
 
     public RegisterRequest(String name, String username, String password, String usertype, Response.Listener<String> listener){

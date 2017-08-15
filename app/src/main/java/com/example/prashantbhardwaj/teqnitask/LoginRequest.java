@@ -12,7 +12,7 @@ import java.util.Map;
  */
 
 public class LoginRequest extends StringRequest{
-    private static final String LOGIN_REQUEST_URL = "http://www.vit5icnn2018.com/teqniHome/login.php";
+    private static final String LOGIN_REQUEST_URL = "http://192.168.1.101/fileTransfers/teqniHome/login.php";
     private Map<String, String> params;
 
     public LoginRequest(String username, String password, Response.Listener<String> listener){

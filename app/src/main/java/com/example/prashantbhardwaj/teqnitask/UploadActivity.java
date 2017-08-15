@@ -67,7 +67,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     private String level3opt = "";
     private Bitmap bitmap;
     private int PICK_IMAGE_REQUEST = 1;
-    private String UPLOAD_URL ="http://www.vit5icnn2018.com/teqniHome/upload.php";
+    private String UPLOAD_URL ="http://192.168.1.101/fileTransfers//teqniHome/upload.php";
     private String KEY_IMAGE = "image";
     private String KEY_UPLOADER = "uploader";
     private String KEY_SESSIONNAME = "sessionname";

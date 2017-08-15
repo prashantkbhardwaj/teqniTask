@@ -11,7 +11,7 @@ import java.util.Map;
  */
 
 public class ProjectionStartRequest extends StringRequest {
-    private static final String PROJECTION_REQUEST_URL = "http://www.vit5icnn2018.com/teqniHome/updateState.php";
+    private static final String PROJECTION_REQUEST_URL = "http://192.168.1.101/fileTransfers/teqniHome/updateState.php";
     private Map<String, String> params;
 
     public ProjectionStartRequest(String data, Response.Listener<String> listener){
