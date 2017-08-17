@@ -19,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,6 +78,7 @@ public class TeacherActivity extends AppCompatActivity
 
         //Calling method to get data
         getData();
+
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab1 = (FloatingActionButton) findViewById(R.id.fab1);
@@ -197,7 +200,8 @@ public class TeacherActivity extends AppCompatActivity
                 superHero.setDate(json.getString(Config.TAG_DATE));
                 superHero.setTimeDuration(json.getString(Config.TAG_TIME_DURATION));
                 superHero.setTag(json.getString(Config.TAG_TAG));
-                ArrayList<String> powers = new ArrayList<String>();
+                superHero.setPostid(json.getString(Config.TAG_POSTID));
+
 
             } catch (JSONException e) {
                 e.printStackTrace();

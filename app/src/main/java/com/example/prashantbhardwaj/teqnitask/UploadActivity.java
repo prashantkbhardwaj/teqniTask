@@ -67,7 +67,6 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     private String level3opt = "";
     private Bitmap bitmap;
     private int PICK_IMAGE_REQUEST = 1;
-    private String UPLOAD_URL ="http://192.168.1.101/fileTransfers//teqniHome/upload.php";
     private String KEY_IMAGE = "image";
     private String KEY_UPLOADER = "uploader";
     private String KEY_SESSIONNAME = "sessionname";
@@ -203,7 +202,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     private void uploadImage(){
         //Showing the progress dialog
         final ProgressDialog loading = ProgressDialog.show(this,"Uploading...","Please wait...",false,false);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, UPLOAD_URL,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.UPLOAD_PICTURE_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {

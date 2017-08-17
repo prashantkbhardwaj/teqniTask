@@ -11,11 +11,11 @@ import java.util.Map;
  */
 
 public class ProjectionStartRequest extends StringRequest {
-    private static final String PROJECTION_REQUEST_URL = "http://192.168.1.101/fileTransfers/teqniHome/updateState.php";
+
     private Map<String, String> params;
 
     public ProjectionStartRequest(String data, Response.Listener<String> listener){
-        super(Method.POST, PROJECTION_REQUEST_URL, listener, null);
+        super(Method.POST, Config.PROJECTION_START_REQUEST_URL, listener, null);
         params = new HashMap<>();
         params.put("data", data);
     }

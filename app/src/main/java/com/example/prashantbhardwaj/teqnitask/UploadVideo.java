@@ -17,7 +17,6 @@ import java.net.URL;
  */
 
 public class UploadVideo {
-    public static final String UPLOAD_URL= "http://192.168.1.101/fileTransfers/teqniHome/uploadVideo.php";
 
     private int serverResponseCode;
 
@@ -41,7 +40,7 @@ public class UploadVideo {
 
         try {
             FileInputStream fileInputStream = new FileInputStream(sourceFile);
-            URL url = new URL(UPLOAD_URL);
+            URL url = new URL(Config.UPLOAD_VIDEO_URL);
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoInput(true);
             conn.setDoOutput(true);

@@ -11,11 +11,10 @@ import java.util.Map;
  */
 
 public class LevelUpdateRequest extends StringRequest {
-    private static final String LEVEL_UPDATE_REQUEST_URL = "http://192.168.1.101/fileTransfers/teqniHome/levelUpdate.php";
     private Map<String, String> params;
 
     public LevelUpdateRequest(String level1, String level2, String level3, String level1opt, String level2opt, String level3opt, Response.Listener<String> listener){
-        super(Method.POST, LEVEL_UPDATE_REQUEST_URL, listener, null);
+        super(Method.POST, Config.LEVEL_UPDATE_REQUEST_URL, listener, null);
         params = new HashMap<>();
         params.put("level1", level1);
         params.put("level2", level2);

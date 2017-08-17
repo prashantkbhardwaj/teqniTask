@@ -1,10 +1,12 @@
 package com.example.prashantbhardwaj.teqnitask;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -41,7 +43,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        SuperHeroes superHero =  superHeroes.get(position);
+        final SuperHeroes superHero =  superHeroes.get(position);
 
         imageLoader = CustomVolleyRequest.getInstance(context).getImageLoader();
         imageLoader.get(superHero.getImageUrl(), ImageLoader.getImageListener(holder.imageView, R.mipmap.ic_launcher, android.R.drawable.ic_dialog_alert));
@@ -51,6 +53,28 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
         holder.textViewDate.setText(String.valueOf(superHero.getDate()));
         holder.textViewTimeDuration.setText(superHero.getTimeDuration());
         holder.tvTag.setText(superHero.getTag());
+        holder.bEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(context, EditPostActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.putExtra("postid", superHero.getPostid().toString());
+                i.putExtra("name", superHero.getName().toString());
+                i.putExtra("timeDuration", superHero.getTimeDuration().toString());
+                context.startActivity(i);
+            }
+        });
+        holder.bDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(context, DeletePostActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.putExtra("postid", superHero.getPostid().toString());
+                context.startActivity(i);
+            }
+        });
     }
 
     @Override
@@ -64,6 +88,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
         public TextView textViewDate;
         public TextView textViewTimeDuration;
         public TextView tvTag;
+        public Button bEdit;
+        public Button bDelete;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -72,6 +98,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
             textViewDate= (TextView) itemView.findViewById(R.id.textViewDate);
             textViewTimeDuration= (TextView) itemView.findViewById(R.id.textViewTimeDuration);
             tvTag = (TextView) itemView.findViewById(R.id.tvTag);
+            bEdit = (Button) itemView.findViewById(R.id.bEdit);
+            bDelete = (Button) itemView.findViewById(R.id.bDelete);
         }
     }
 }
