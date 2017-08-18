@@ -11,6 +11,7 @@ public class SuperHeroes {
     private String timeDuration;
     private String tag;
     private String postid;
+    private String pos;
 
     //Getters and Setters
     public String getImageUrl() {
@@ -55,5 +56,13 @@ public class SuperHeroes {
 
     public void setPostid(String postid) {
         this.postid = postid;
+    }
+
+    public String getPos() {
+        return pos;
+    }
+
+    public void setPos(String pos) {
+        this.pos = pos;
     }
 }

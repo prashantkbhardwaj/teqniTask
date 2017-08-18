@@ -22,6 +22,7 @@ public class EditPostActivity extends AppCompatActivity {
     private String postid;
     private EditText etName;
     private EditText etTimeDuration;
+    private EditText etPos;
     private Button bUpdate;
 
     @Override
@@ -32,13 +33,16 @@ public class EditPostActivity extends AppCompatActivity {
         postid = getIntent().getExtras().get("postid").toString();
         etName = (EditText) findViewById(R.id.etNameU);
         etTimeDuration = (EditText) findViewById(R.id.etTimeDurationU);
+        etPos = (EditText) findViewById(R.id.etPos);
 
         if ((getIntent().getExtras().get("name").toString()).equals(null)||(getIntent().getExtras().get("name").toString()).equals("")){
             etName.setText("name");
             etTimeDuration.setText("0");
+            etPos.setText("0");
         } else {
             etName.setText(getIntent().getExtras().get("name").toString());
             etTimeDuration.setText(getIntent().getExtras().get("timeDuration").toString());
+            etPos.setText(getIntent().getExtras().get("pos").toString());
         }
 
         bUpdate = (Button) findViewById(R.id.bUpdate);
@@ -72,7 +76,7 @@ public class EditPostActivity extends AppCompatActivity {
                     }
                 };
 
-                EditPostRequest editPostRequest = new EditPostRequest(postid, etName.getText().toString(), etTimeDuration.getText().toString(),responseListener);
+                EditPostRequest editPostRequest = new EditPostRequest(postid, etName.getText().toString(), etTimeDuration.getText().toString(), etPos.getText().toString(), responseListener);
                 RequestQueue queue = Volley.newRequestQueue(EditPostActivity.this);
                 queue.add(editPostRequest);
             }

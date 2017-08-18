@@ -13,12 +13,13 @@ import java.util.Map;
 public class EditPostRequest extends StringRequest {
     private Map<String, String> params;
 
-    public EditPostRequest(String postid, String name, String timeDuration, Response.Listener<String> listener){
+    public EditPostRequest(String postid, String name, String timeDuration, String pos, Response.Listener<String> listener){
         super(Method.POST, Config.EDIT_POST_URL, listener, null);
         params = new HashMap<>();
         params.put("postid", postid);
         params.put("name", name);
         params.put("timeDuration", timeDuration);
+        params.put("pos", pos);
     }
 
     @Override

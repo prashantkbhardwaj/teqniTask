@@ -201,13 +201,13 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
     private void uploadImage(){
         //Showing the progress dialog
-        final ProgressDialog loading = ProgressDialog.show(this,"Uploading...","Please wait...",false,false);
+        final ProgressDialog loadingnow = ProgressDialog.show(this,"Uploading...","Please wait...",false,false);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.UPLOAD_PICTURE_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
                         //Disimissing the progress dialog
-                        loading.dismiss();
+                        loadingnow.dismiss();
                         //Showing toast message of the response
                         Intent intent = new Intent(UploadActivity.this, TeacherActivity.class);
                         UploadActivity.this.startActivity(intent);
@@ -218,7 +218,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         //Dismissing the progress dialog
-                        loading.dismiss();
+                        loadingnow.dismiss();
 
                         //Showing toast
                         Toast.makeText(UploadActivity.this, volleyError.getMessage().toString(), Toast.LENGTH_LONG).show();

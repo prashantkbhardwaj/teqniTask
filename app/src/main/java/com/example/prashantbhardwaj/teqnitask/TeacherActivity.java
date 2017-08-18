@@ -201,6 +201,7 @@ public class TeacherActivity extends AppCompatActivity
                 superHero.setTimeDuration(json.getString(Config.TAG_TIME_DURATION));
                 superHero.setTag(json.getString(Config.TAG_TAG));
                 superHero.setPostid(json.getString(Config.TAG_POSTID));
+                superHero.setPos(json.getString(Config.TAG_POS));
 
 
             } catch (JSONException e) {

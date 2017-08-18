@@ -62,6 +62,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
                 i.putExtra("postid", superHero.getPostid().toString());
                 i.putExtra("name", superHero.getName().toString());
                 i.putExtra("timeDuration", superHero.getTimeDuration().toString());
+                i.putExtra("pos", superHero.getPos().toString());
                 context.startActivity(i);
             }
         });
