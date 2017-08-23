@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,15 +20,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -36,26 +42,35 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class TeacherActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private View navHeader;
-    private List<SuperHeroes> listSuperHeroes;
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
-    private RecyclerView.Adapter adapter;
-
-    private Boolean isFabOpen = false;
-    private FloatingActionButton fab,fab1,fab2;
-    private Animation fab_open,fab_close,rotate_forward,rotate_backward;
+    private ListView roomList;
+    private ArrayList<String> roomArrayList;
+    private ArrayAdapter<String> roomAdapter;
+    private FloatingActionButton fab;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher);
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(TeacherActivity.this, CreateSessionActivity.class);
+                TeacherActivity.this.startActivity(intent);
+            }
+        });
 
         final SessionManagement session;
         session = new SessionManagement(getApplicationContext());
@@ -65,52 +80,15 @@ public class TeacherActivity extends AppCompatActivity
         String username = user.get(SessionManagement.KEY_USERNAME);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+       // setSupportActionBar(toolbar);
 
+        roomList = (ListView) findViewById(R.id.roomListView);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
+        roomArrayList = new ArrayList<String>();
+        roomAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
+                roomArrayList);
 
-        //Initializing our superheroes list
-        listSuperHeroes = new ArrayList<>();
-
-        //Calling method to get data
-        getData();
-
-
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab1 = (FloatingActionButton) findViewById(R.id.fab1);
-        fab2 = (FloatingActionButton) findViewById(R.id.fab2);
-
-        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
-        fab_close = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
-        rotate_forward = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_forward);
-        rotate_backward = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_backward);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                animateFAB();
-            }
-        });
-
-        fab1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(TeacherActivity.this, UploadVideoActivity.class);
-                TeacherActivity.this.startActivity(intent);
-            }
-        });
-
-        fab2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(TeacherActivity.this, UploadActivity.class);
-                TeacherActivity.this.startActivity(intent);
-            }
-        });
+        roomList.setAdapter(roomAdapter);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -132,90 +110,63 @@ public class TeacherActivity extends AppCompatActivity
             tvName.setText(name);
             tvUsername.setText(username);
         }
-    }
 
-    public void animateFAB(){
+        roomArrayList.clear();
+        final Set<String> set = new HashSet<String>();
 
-        if(isFabOpen){
+        Response.Listener<String> responseListener = new Response.Listener<String>(){
 
-            fab.startAnimation(rotate_backward);
-            fab1.startAnimation(fab_close);
-            fab2.startAnimation(fab_close);
-            fab1.setClickable(false);
-            fab2.setClickable(false);
-            isFabOpen = false;
-            Log.d("PKB", "close");
-
-        } else {
-
-            fab.startAnimation(rotate_forward);
-            fab1.startAnimation(fab_open);
-            fab2.startAnimation(fab_open);
-            fab1.setClickable(true);
-            fab2.setClickable(true);
-            isFabOpen = true;
-            Log.d("PKB","open");
-
-        }
-    }
-
-    private void getData(){
-        //Showing a progress dialog
-        final ProgressDialog loading = ProgressDialog.show(this,"Loading Data", "Please wait...",false,false);
-
-        //Creating a json array request
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Config.DOWNLOAD_DATA_URL,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        //Dismissing progress dialog
-                        loading.dismiss();
-
-                        //calling method to parse json array
-                        parseData(response);
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonResponse = new JSONObject(response);
+                    boolean success = jsonResponse.getBoolean("success");
+                    if (success){
+                        String sessionData = jsonResponse.getString("sessionData");
+                        String[] sessEx = sessionData.toString().split(",");
+                        for (int i = 0; i < sessEx.length; i++){
+                            set.add(sessEx[i].toString());
+                           // System.out.println(sessEx[i]);
+                        }
+                        roomArrayList.addAll(set);
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(TeacherActivity.this);
+                        builder.setMessage("Load Failed")
+                                .setNegativeButton("Retry", null)
+                                .create()
+                                .show();
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                });
-
-        //Creating request queue
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-
-        //Adding request to the queue
-        requestQueue.add(jsonArrayRequest);
-    }
-
-    private void parseData(JSONArray array){
-        for(int i = 0; i<array.length(); i++) {
-            SuperHeroes superHero = new SuperHeroes();
-            JSONObject json = null;
-            try {
-                json = array.getJSONObject(i);
-                superHero.setImageUrl(json.getString(Config.TAG_IMAGE_URL));
-                superHero.setName(json.getString(Config.TAG_NAME));
-                superHero.setDate(json.getString(Config.TAG_DATE));
-                superHero.setTimeDuration(json.getString(Config.TAG_TIME_DURATION));
-                superHero.setTag(json.getString(Config.TAG_TAG));
-                superHero.setPostid(json.getString(Config.TAG_POSTID));
-                superHero.setPos(json.getString(Config.TAG_POS));
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-            listSuperHeroes.add(superHero);
-        }
+        };
 
-        //Finally initializing our adapter
-        adapter = new CardAdapter(listSuperHeroes, this);
+        SessionLoadRequest sessionLoadRequest = new SessionLoadRequest(username, responseListener);
+        RequestQueue queue = Volley.newRequestQueue(TeacherActivity.this);
+        queue.add(sessionLoadRequest);
 
-        //Adding adapter to recyclerview
-        recyclerView.setAdapter(adapter);
+//        roomArrayList.add("Sessin1");
+//        roomArrayList.add("Sessin2");
+//        roomArrayList.add("Sessin3");
+
+
+
+        roomAdapter.notifyDataSetChanged();
+
+        roomList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Intent intent = new Intent(TeacherActivity.this, DataActivity.class);
+                intent.putExtra("sess", ((TextView) view).getText().toString());
+                TeacherActivity.this.startActivity(intent);
+
+            }
+        });
     }
+
+
 
     @Override
     public void onBackPressed() {

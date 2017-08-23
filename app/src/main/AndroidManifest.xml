@@ -34,14 +34,20 @@
             android:name=".StudentActivity"
             android:label="@string/title_activity_student"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".TeacherActivity"
+            android:label="TeacherActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".TeacherActivity" />
         <activity android:name=".UploadActivity" />
         <activity android:name=".StopProjectionActivity" />
         <activity android:name=".UploadVideoActivity" />
         <activity android:name=".EditPostActivity" />
-        <activity android:name=".DeletePostActivity"></activity>
+        <activity android:name=".DeletePostActivity" />
+        <activity android:name=".DataActivity" />
+        <activity android:name=".DeleteSessionActivity" />
+        <activity android:name=".CreateSessionActivity"></activity>
     </application>
 
 </manifest>
