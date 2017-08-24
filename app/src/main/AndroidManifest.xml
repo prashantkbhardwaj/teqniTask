@@ -47,7 +47,8 @@
         <activity android:name=".DeletePostActivity" />
         <activity android:name=".DataActivity" />
         <activity android:name=".DeleteSessionActivity" />
-        <activity android:name=".CreateSessionActivity"></activity>
+        <activity android:name=".CreateSessionActivity" />
+        <activity android:name=".EditSessionActivity"></activity>
     </application>
 
 </manifest>

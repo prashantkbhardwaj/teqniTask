@@ -36,20 +36,6 @@ public class UploadVideoActivity extends AppCompatActivity implements View.OnCli
     private Button bSelectVideo;
     private Button bUploadVideo;
     private TextView tvSource;
-    private ProgressDialog loading;
-    private String level1 ="";
-    private String level1opt ="";
-    private String level2 = "";
-    private String level2opt = "";
-    private String level3 = "";
-    private String level3opt = "";
-    private TextView tvLevel1;
-    private TextView tvLevel2;
-    private TextView tvLevel3;
-    private Spinner spLevel1;
-    private Spinner spLevel2;
-    private Spinner spLevel3;
-    private EditText etSessionName;
     private EditText etVideoName;
     private static final int SELECT_VIDEO = 3;
     private String selectedPath;
@@ -71,13 +57,7 @@ public class UploadVideoActivity extends AppCompatActivity implements View.OnCli
         bUploadVideo = (Button) findViewById(R.id.bUploadVideo);
         tvSource = (TextView) findViewById(R.id.tvSource);
 
-        spLevel1 = (Spinner) findViewById(R.id.spLevel1OptV);
-        spLevel2 = (Spinner) findViewById(R.id.spLevel2OptV);
-        spLevel3 = (Spinner) findViewById(R.id.spLevel3OptV);
-        etSessionName = (EditText) findViewById(R.id.etSessionNameV);
         etVideoName = (EditText) findViewById(R.id.etVideoName);
-
-        getData();
 
         bSelectVideo.setOnClickListener(this);
         bUploadVideo.setOnClickListener(this);
@@ -165,7 +145,7 @@ public class UploadVideoActivity extends AppCompatActivity implements View.OnCli
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         //Dismissing the progress dialog
-                        loading.dismiss();
+                        loadingNow.dismiss();
 
                         //Showing toast
                         Toast.makeText(UploadVideoActivity.this, volleyError.getMessage().toString(), Toast.LENGTH_LONG).show();
@@ -180,7 +160,7 @@ public class UploadVideoActivity extends AppCompatActivity implements View.OnCli
 
                 HashMap<String, String> user = session.getUserDetails();
                 String uploader = user.get(SessionManagement.KEY_USERNAME);
-                String qrurl = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data="+String.valueOf(spLevel1.getSelectedItem())+"_"+String.valueOf(spLevel2.getSelectedItem())+"_"+String.valueOf(spLevel3.getSelectedItem())+"_"+etSessionName.getText().toString();
+                String qrurl = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data="+getIntent().getExtras().get("level1").toString()+"_"+getIntent().getExtras().get("level2").toString()+"_"+getIntent().getExtras().get("level3").toString()+"_"+getIntent().getExtras().get("session").toString();
 
                 //Creating parameters
                 Map<String,String> params = new Hashtable<>();
@@ -188,11 +168,11 @@ public class UploadVideoActivity extends AppCompatActivity implements View.OnCli
                 //Adding parameters
                 params.put(KEY_VIDEO, selectedPath);
                 params.put(KEY_UPLOADER, uploader);
-                params.put(KEY_LEVEL1, String.valueOf(spLevel1.getSelectedItem()));
-                params.put(KEY_LEVEL2, String.valueOf(spLevel2.getSelectedItem()));
-                params.put(KEY_LEVEL3, String.valueOf(spLevel3.getSelectedItem()));
+                params.put(KEY_LEVEL1, getIntent().getExtras().get("level1").toString());
+                params.put(KEY_LEVEL2, getIntent().getExtras().get("level2").toString());
+                params.put(KEY_LEVEL3, getIntent().getExtras().get("level3").toString());
                 params.put(KEY_VIDEONAME, etVideoName.getText().toString());
-                params.put(KEY_SESSIONNAME, etSessionName.getText().toString());
+                params.put(KEY_SESSIONNAME, getIntent().getExtras().get("session").toString());
                 params.put(KEY_QRCODE, qrurl);
                 //returning parameters
                 return params;
@@ -215,75 +195,5 @@ public class UploadVideoActivity extends AppCompatActivity implements View.OnCli
         if (v == bUploadVideo) {
             uploadVideoHere();
         }
-    }
-
-    private void getData() {
-        loading = ProgressDialog.show(this,"Please wait...","Fetching...",false,false);
-
-        String url = Config.SPINNER_DATA_URL.toString().trim();
-
-        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                loading.dismiss();
-                showJSON(response);
-                final RequestManagement requestManagement;
-                requestManagement = new RequestManagement(getApplicationContext());
-                requestManagement.putData(level1);
-                //System.out.println("inside: "+level1);
-            }
-        },
-
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(UploadVideoActivity.this,error.getMessage().toString(),Toast.LENGTH_LONG).show();
-                    }
-                });
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-    }
-
-    private void showJSON(String response){
-        try {
-
-            JSONObject jsonObject = new JSONObject(response);
-            level1 = jsonObject.getString(Config.KEY_LEVEL1);
-            level1opt = jsonObject.getString(Config.KEY_LEVEL1OPT);
-            level2 = jsonObject.getString(Config.KEY_LEVEL2);
-            level2opt = jsonObject.getString(Config.KEY_LEVEL2OPT);
-            level3 = jsonObject.getString(Config.KEY_LEVEL3);
-            level3opt = jsonObject.getString(Config.KEY_LEVEL3OPT);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        String[] level1List = level1opt.toString().split(",");
-        String[] level2List = level2opt.toString().split(",");
-        String[] level3List = level3opt.toString().split(",");
-
-
-        tvLevel1 = (TextView) findViewById(R.id.tvLevel1V);
-        tvLevel2 = (TextView) findViewById(R.id.tvLevel2V);
-        tvLevel3 = (TextView) findViewById(R.id.tvLevel3V);
-
-        tvLevel1.setText(level1);
-        tvLevel2.setText(level2);
-        tvLevel3.setText(level3);
-
-        ArrayAdapter<String> spLevel1ArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item, level1List);
-        spLevel1ArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
-        spLevel1.setAdapter(spLevel1ArrayAdapter);
-
-        ArrayAdapter<String> spLevel2ArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item, level2List);
-        spLevel2ArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
-        spLevel2.setAdapter(spLevel2ArrayAdapter);
-
-        ArrayAdapter<String> spLevel3ArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item, level3List);
-        spLevel3ArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
-        spLevel3.setAdapter(spLevel3ArrayAdapter);
-
     }
 }

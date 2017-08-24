@@ -3,6 +3,7 @@ package com.example.prashantbhardwaj.teqnitask;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,7 +39,7 @@ public class DataActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
 
     private Boolean isFabOpen = false;
-    private FloatingActionButton fab,fab1,fab2, fab3;
+    private FloatingActionButton fab,fab1,fab2, fab3, fab4;
     private Animation fab_open,fab_close,rotate_forward,rotate_backward;
     private String KEY_USER = "user";
     private String KEY_SESSION = "session";
@@ -66,6 +67,7 @@ public class DataActivity extends AppCompatActivity {
         fab1 = (FloatingActionButton) findViewById(R.id.fab1);
         fab2 = (FloatingActionButton) findViewById(R.id.fab2);
         fab3 = (FloatingActionButton) findViewById(R.id.fab3);
+        fab4 = (FloatingActionButton) findViewById(R.id.fab4);
 
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
@@ -79,31 +81,87 @@ public class DataActivity extends AppCompatActivity {
             }
         });
 
-        fab1.setOnClickListener(new View.OnClickListener() {
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(DataActivity.this, UploadVideoActivity.class);
-                DataActivity.this.startActivity(intent);
-            }
-        });
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonResponse = new JSONObject(response);
+                    boolean success = jsonResponse.getBoolean("success");
+                    if (success) {
+                        final String level1 = jsonResponse.getString("level1");
+                        final String level2 = jsonResponse.getString("level2");
+                        final String level3 = jsonResponse.getString("level3");
 
-        fab2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(DataActivity.this, UploadActivity.class);
-                DataActivity.this.startActivity(intent);
-            }
-        });
+                        fab1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(DataActivity.this, UploadVideoActivity.class);
+                                intent.putExtra("session", getIntent().getExtras().get("sess").toString());
+                                intent.putExtra("level1", level1);
+                                intent.putExtra("level2", level2);
+                                intent.putExtra("level3", level3);
+                                DataActivity.this.startActivity(intent);
+                            }
+                        });
 
-        fab3
-                .setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(DataActivity.this, DeleteSessionActivity.class);
-                intent.putExtra("session", getIntent().getExtras().get("sess").toString());
-                DataActivity.this.startActivity(intent);
+                        fab2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(DataActivity.this, UploadActivity.class);
+                                intent.putExtra("session", getIntent().getExtras().get("sess").toString());
+                                intent.putExtra("level1", level1);
+                                intent.putExtra("level2", level2);
+                                intent.putExtra("level3", level3);
+                                DataActivity.this.startActivity(intent);
+                            }
+                        });
+
+                        fab3.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(DataActivity.this, DeleteSessionActivity.class);
+                                intent.putExtra("session", getIntent().getExtras().get("sess").toString());
+                                DataActivity.this.startActivity(intent);
+                            }
+                        });
+
+                        fab4.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(DataActivity.this, EditSessionActivity.class);
+                                intent.putExtra("session", getIntent().getExtras().get("sess").toString());
+                                intent.putExtra("level1", level1);
+                                intent.putExtra("level2", level2);
+                                intent.putExtra("level3", level3);
+                                DataActivity.this.startActivity(intent);
+                            }
+                        });
+
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(DataActivity.this);
+                        builder.setMessage("Load Failed")
+                                .setNegativeButton("Retry", null)
+                                .create()
+                                .show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
             }
-        });
+        };
+
+        final SessionManagement session;
+        session = new SessionManagement(getApplicationContext());
+        session.checkLogin();
+
+        HashMap<String, String> user = session.getUserDetails();
+        String username = user.get(SessionManagement.KEY_USERNAME);
+
+        SessionDataRequest sessionDataRequest = new SessionDataRequest(username, getIntent().getExtras().get("sess").toString(), responseListener);
+        RequestQueue queue = Volley.newRequestQueue(DataActivity.this);
+        queue.add(sessionDataRequest);
+
 
     }
 
@@ -115,9 +173,11 @@ public class DataActivity extends AppCompatActivity {
             fab1.startAnimation(fab_close);
             fab2.startAnimation(fab_close);
             fab3.startAnimation(fab_close);
+            fab4.startAnimation(fab_close);
             fab1.setClickable(false);
             fab2.setClickable(false);
             fab3.setClickable(false);
+            fab4.setClickable(false);
             isFabOpen = false;
             Log.d("PKB", "close");
 
@@ -127,9 +187,11 @@ public class DataActivity extends AppCompatActivity {
             fab1.startAnimation(fab_open);
             fab2.startAnimation(fab_open);
             fab3.startAnimation(fab_open);
+            fab4.startAnimation(fab_open);
             fab1.setClickable(true);
             fab2.setClickable(true);
             fab3.setClickable(true);
+            fab4.setClickable(true);
             isFabOpen = true;
             Log.d("PKB","open");
 

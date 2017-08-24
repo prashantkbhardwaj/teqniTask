@@ -20,6 +20,8 @@ public class Config {
     public static final String SESSION_LOAD_URL= "http://192.168.1.104/fileTransfers/teqniHome/sessionLoad.php";
     public static final String DELETE_SESSION_URL= "http://192.168.1.104/fileTransfers/teqniHome/deleteSession.php";
     public static final String CREATE_SESSION_URL= "http://192.168.1.104/fileTransfers/teqniHome/createSession.php";
+    public static final String SESSION_DATA_URL= "http://192.168.1.104/fileTransfers/teqniHome/sessionData.php";
+    public static final String EDIT_SESSION_URL= "http://192.168.1.104/fileTransfers/teqniHome/editSession.php";
 
     public static final String KEY_LEVEL1 = "level1";
     public static final String KEY_LEVEL1OPT = "level1opt";
