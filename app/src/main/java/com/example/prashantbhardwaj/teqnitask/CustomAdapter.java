@@ -35,6 +35,7 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
     private static class ViewHolder {
         TextView txtName;
         ImageView info;
+        ImageView delete;
     }
 
 
@@ -58,8 +59,7 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
 
 
 
-        switch (v.getId())
-        {
+        switch (v.getId()) {
 
             case R.id.item_info:
 
@@ -111,11 +111,18 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
 
                 break;
 
-
+            case R.id.item_delete:
+                Intent i = new Intent(mContext, DeleteSessionActivity.class);
+                i.putExtra("session", dataModel.getName().toString());
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(i);
+                break;
         }
 
 
     }
+
 
     private int lastPosition = -1;
 
@@ -136,6 +143,7 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
             convertView = inflater.inflate(R.layout.row_item, parent, false);
             viewHolder.txtName = (TextView) convertView.findViewById(R.id.name);
             viewHolder.info = (ImageView) convertView.findViewById(R.id.item_info);
+            viewHolder.delete = (ImageView) convertView.findViewById(R.id.item_delete);
 
             result=convertView;
 
@@ -153,6 +161,8 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
         viewHolder.txtName.setText(dataModel.getName());
         viewHolder.info.setOnClickListener(this);
         viewHolder.info.setTag(position);
+        viewHolder.delete.setOnClickListener(this);
+        viewHolder.delete.setTag(position);
         // Return the completed view to render on screen
         return convertView;
     }

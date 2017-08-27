@@ -15,13 +15,21 @@
 
 
     <ImageView
-        android:id="@+id/item_info"
+        android:id="@+id/item_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:src="@android:drawable/ic_menu_edit" />
+        android:src="@android:drawable/ic_menu_delete" />
+
+    <ImageView
+        android:id="@+id/item_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:src="@android:drawable/ic_menu_edit"
+        android:layout_toLeftOf="@+id/item_delete" />
 
 
     <LinearLayout
