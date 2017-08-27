@@ -36,12 +36,10 @@ public class UploadVideoActivity extends AppCompatActivity implements View.OnCli
     private Button bSelectVideo;
     private Button bUploadVideo;
     private TextView tvSource;
-    private EditText etVideoName;
     private static final int SELECT_VIDEO = 3;
     private String selectedPath;
     private String KEY_UPLOADER = "uploader";
     private String KEY_SESSIONNAME = "sessionname";
-    private String KEY_VIDEONAME = "picturename";
     private String KEY_LEVEL1 = "level1";
     private String KEY_LEVEL2 = "level2";
     private String KEY_LEVEL3 = "level3";
@@ -56,8 +54,6 @@ public class UploadVideoActivity extends AppCompatActivity implements View.OnCli
         bSelectVideo = (Button) findViewById(R.id.bSelectVideo);
         bUploadVideo = (Button) findViewById(R.id.bUploadVideo);
         tvSource = (TextView) findViewById(R.id.tvSource);
-
-        etVideoName = (EditText) findViewById(R.id.etVideoName);
 
         bSelectVideo.setOnClickListener(this);
         bUploadVideo.setOnClickListener(this);
@@ -171,7 +167,6 @@ public class UploadVideoActivity extends AppCompatActivity implements View.OnCli
                 params.put(KEY_LEVEL1, getIntent().getExtras().get("level1").toString());
                 params.put(KEY_LEVEL2, getIntent().getExtras().get("level2").toString());
                 params.put(KEY_LEVEL3, getIntent().getExtras().get("level3").toString());
-                params.put(KEY_VIDEONAME, etVideoName.getText().toString());
                 params.put(KEY_SESSIONNAME, getIntent().getExtras().get("session").toString());
                 params.put(KEY_QRCODE, qrurl);
                 //returning parameters

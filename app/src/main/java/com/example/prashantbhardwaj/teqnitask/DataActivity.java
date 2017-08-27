@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -37,6 +38,9 @@ public class DataActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
+    private TextView tvSessionView;
+    private TextView tvTree;
+    private TextView tvDesc;
 
     private Boolean isFabOpen = false;
     private FloatingActionButton fab,fab1,fab2, fab3, fab4;
@@ -53,6 +57,12 @@ public class DataActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
+        tvSessionView = (TextView) findViewById(R.id.tvSessionView);
+        tvTree = (TextView) findViewById(R.id.tvTree);
+        tvDesc = (TextView) findViewById(R.id.tvDesc);
+
+        tvSessionView.setText(getIntent().getExtras().get("sess").toString());
 
        // System.out.println(getIntent().getExtras().get("sess").toString());
 
@@ -91,6 +101,10 @@ public class DataActivity extends AppCompatActivity {
                         final String level1 = jsonResponse.getString("level1");
                         final String level2 = jsonResponse.getString("level2");
                         final String level3 = jsonResponse.getString("level3");
+                        final String description = jsonResponse.getString("description");
+
+                        tvTree.setText(level1+"-"+level2+"-"+level3);
+                        tvDesc.setText(description);
 
                         fab1.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -219,10 +233,8 @@ public class DataActivity extends AppCompatActivity {
                                 try {
                                     json = array.getJSONObject(i);
                                     superHero.setImageUrl(json.getString(Config.TAG_IMAGE_URL));
-                                    superHero.setName(json.getString(Config.TAG_NAME));
                                     superHero.setDate(json.getString(Config.TAG_DATE));
                                     superHero.setTimeDuration(json.getString(Config.TAG_TIME_DURATION));
-                                    superHero.setTag(json.getString(Config.TAG_TAG));
                                     superHero.setPostid(json.getString(Config.TAG_POSTID));
                                     superHero.setPos(json.getString(Config.TAG_POS));
 

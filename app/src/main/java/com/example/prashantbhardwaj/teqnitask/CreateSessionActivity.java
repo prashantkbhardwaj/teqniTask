@@ -36,6 +36,7 @@ public class CreateSessionActivity extends AppCompatActivity {
     private TextView tvLevel1;
     private TextView tvLevel2;
     private TextView tvLevel3;
+    private EditText etDesc;
     private Button bCreateSession;
     private ProgressDialog loading;
     private String level1 ="";
@@ -49,6 +50,7 @@ public class CreateSessionActivity extends AppCompatActivity {
     private String KEY_LEVEL2 = "level2";
     private String KEY_LEVEL3 = "level3";
     private String KEY_SESSIONNAME = "sessionName";
+    private String KEY_DESCRIPTION = "description";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,7 @@ public class CreateSessionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_session);
 
         etSessionName = (EditText) findViewById(R.id.etSessionNameC);
+        etDesc = (EditText) findViewById(R.id.etDesc);
         spLevel1Opt = (Spinner) findViewById(R.id.spLevel1OptC);
         spLevel2Opt = (Spinner) findViewById(R.id.spLevel2OptC);
         spLevel3Opt = (Spinner) findViewById(R.id.spLevel3OptC);
@@ -184,6 +187,7 @@ public class CreateSessionActivity extends AppCompatActivity {
                 params.put(KEY_LEVEL2, String.valueOf(spLevel2Opt.getSelectedItem()));
                 params.put(KEY_LEVEL3, String.valueOf(spLevel3Opt.getSelectedItem()));
                 params.put(KEY_SESSIONNAME, etSessionName.getText().toString());
+                params.put(KEY_DESCRIPTION, etDesc.getText().toString());
 
                 //returning parameters
                 return params;

@@ -41,6 +41,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -52,9 +53,9 @@ public class TeacherActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private View navHeader;
-    private ListView roomList;
-    private ArrayList<String> roomArrayList;
-    private ArrayAdapter<String> roomAdapter;
+    ArrayList<DataModel> dataModels;
+    ListView listView;
+    private static CustomAdapter adapter;
     private FloatingActionButton fab;
 
 
@@ -82,13 +83,10 @@ public class TeacherActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
        // setSupportActionBar(toolbar);
 
-        roomList = (ListView) findViewById(R.id.roomListView);
+        listView=(ListView)findViewById(R.id.roomListView);
 
-        roomArrayList = new ArrayList<String>();
-        roomAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
-                roomArrayList);
 
-        roomList.setAdapter(roomAdapter);
+        dataModels= new ArrayList<>();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -111,7 +109,7 @@ public class TeacherActivity extends AppCompatActivity
             tvUsername.setText(username);
         }
 
-        roomArrayList.clear();
+
         final Set<String> set = new HashSet<String>();
 
         Response.Listener<String> responseListener = new Response.Listener<String>(){
@@ -125,10 +123,21 @@ public class TeacherActivity extends AppCompatActivity
                         String sessionData = jsonResponse.getString("sessionData");
                         String[] sessEx = sessionData.toString().split(",");
                         for (int i = 0; i < sessEx.length; i++){
-                            set.add(sessEx[i].toString());
-                           // System.out.println(sessEx[i]);
+                            dataModels.add(new DataModel(sessEx[i].toString()));
                         }
-                        roomArrayList.addAll(set);
+                        adapter= new CustomAdapter(dataModels,getApplicationContext());
+
+                        listView.setAdapter(adapter);
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                                DataModel dataModel= dataModels.get(position);
+                                Intent intent = new Intent(TeacherActivity.this, DataActivity.class);
+                                intent.putExtra("sess", (dataModel.getName()));
+                                TeacherActivity.this.startActivity(intent);
+                            }
+                        });
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(TeacherActivity.this);
                         builder.setMessage("Load Failed")
@@ -146,26 +155,8 @@ public class TeacherActivity extends AppCompatActivity
         RequestQueue queue = Volley.newRequestQueue(TeacherActivity.this);
         queue.add(sessionLoadRequest);
 
-//        roomArrayList.add("Sessin1");
-//        roomArrayList.add("Sessin2");
-//        roomArrayList.add("Sessin3");
 
-
-
-        roomAdapter.notifyDataSetChanged();
-
-        roomList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Intent intent = new Intent(TeacherActivity.this, DataActivity.class);
-                intent.putExtra("sess", ((TextView) view).getText().toString());
-                TeacherActivity.this.startActivity(intent);
-
-            }
-        });
     }
-
 
 
     @Override

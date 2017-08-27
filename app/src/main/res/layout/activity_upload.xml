@@ -28,7 +28,7 @@
     <ImageView
         android:id="@+id/ivPicture"
         android:layout_width="0dp"
-        android:layout_height="168dp"
+        android:layout_height="236dp"
         app:srcCompat="@drawable/ic_menu_gallery"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
@@ -40,29 +40,8 @@
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginLeft="23dp"
-        android:layout_marginRight="23dp" />
-
-    <EditText
-        android:id="@+id/etPictureName"
-        android:layout_width="0dp"
-        android:layout_height="54dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:ems="10"
-        android:hint="Picture's Name"
-        android:inputType="textPersonName"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="191dp"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="193dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/ivPicture"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp" />
+        android:layout_marginRight="23dp"
+        app:layout_constraintHorizontal_bias="0.0" />
 
     <EditText
         android:id="@+id/etTimeDuration"
@@ -73,16 +52,13 @@
         android:ems="10"
         android:hint="Time Duration in seconds"
         android:inputType="number"
-        tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
         app:layout_constraintBottom_toBottomOf="@+id/bUpload"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="73dp"
         tools:layout_constraintLeft_creator="1"
         android:layout_marginBottom="84dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/etPictureName"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp" />
 

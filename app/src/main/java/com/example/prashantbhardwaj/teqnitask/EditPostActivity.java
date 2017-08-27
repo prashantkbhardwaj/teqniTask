@@ -20,7 +20,6 @@ import org.json.JSONObject;
 public class EditPostActivity extends AppCompatActivity {
 
     private String postid;
-    private EditText etName;
     private EditText etTimeDuration;
     private EditText etPos;
     private Button bUpdate;
@@ -31,16 +30,13 @@ public class EditPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_post);
 
         postid = getIntent().getExtras().get("postid").toString();
-        etName = (EditText) findViewById(R.id.etNameU);
         etTimeDuration = (EditText) findViewById(R.id.etTimeDurationU);
         etPos = (EditText) findViewById(R.id.etPos);
 
-        if ((getIntent().getExtras().get("name").toString()).equals(null)||(getIntent().getExtras().get("name").toString()).equals("")){
-            etName.setText("name");
+        if ((getIntent().getExtras().get("timeDuration").toString()).equals(null)||(getIntent().getExtras().get("timeDuration").toString()).equals("")){
             etTimeDuration.setText("0");
             etPos.setText("0");
         } else {
-            etName.setText(getIntent().getExtras().get("name").toString());
             etTimeDuration.setText(getIntent().getExtras().get("timeDuration").toString());
             etPos.setText(getIntent().getExtras().get("pos").toString());
         }
@@ -76,7 +72,7 @@ public class EditPostActivity extends AppCompatActivity {
                     }
                 };
 
-                EditPostRequest editPostRequest = new EditPostRequest(postid, etName.getText().toString(), etTimeDuration.getText().toString(), etPos.getText().toString(), responseListener);
+                EditPostRequest editPostRequest = new EditPostRequest(postid, etTimeDuration.getText().toString(), etPos.getText().toString(), responseListener);
                 RequestQueue queue = Volley.newRequestQueue(EditPostActivity.this);
                 queue.add(editPostRequest);
             }

@@ -6,10 +6,8 @@ package com.example.prashantbhardwaj.teqnitask;
 
 public class SuperHeroes {
     private String imageUrl;
-    private String name;
     private String date;
     private String timeDuration;
-    private String tag;
     private String postid;
     private String pos;
 
@@ -22,13 +20,6 @@ public class SuperHeroes {
         this.imageUrl = imageUrl;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getDate() {
         return date;
@@ -46,9 +37,6 @@ public class SuperHeroes {
         this.timeDuration = timeDuration;
     }
 
-    public String getTag(){ return tag; }
-
-    public void setTag(String tag) { this.tag = tag; }
 
     public String getPostid() {
         return postid;

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -49,10 +50,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
         imageLoader.get(superHero.getImageUrl(), ImageLoader.getImageListener(holder.imageView, R.mipmap.ic_launcher, android.R.drawable.ic_dialog_alert));
 
         holder.imageView.setImageUrl(superHero.getImageUrl(), imageLoader);
-        holder.textViewName.setText(superHero.getName());
         holder.textViewDate.setText(String.valueOf(superHero.getDate()));
         holder.textViewTimeDuration.setText(superHero.getTimeDuration());
-        holder.tvTag.setText(superHero.getTag());
         holder.bEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,7 +59,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.putExtra("postid", superHero.getPostid().toString());
-                i.putExtra("name", superHero.getName().toString());
                 i.putExtra("timeDuration", superHero.getTimeDuration().toString());
                 i.putExtra("pos", superHero.getPos().toString());
                 context.startActivity(i);
@@ -85,22 +83,18 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
 
     class ViewHolder extends RecyclerView.ViewHolder{
         public NetworkImageView imageView;
-        public TextView textViewName;
         public TextView textViewDate;
         public TextView textViewTimeDuration;
-        public TextView tvTag;
-        public Button bEdit;
-        public Button bDelete;
+        public ImageButton bEdit;
+        public ImageButton bDelete;
 
         public ViewHolder(View itemView) {
             super(itemView);
             imageView = (NetworkImageView) itemView.findViewById(R.id.imageViewHero);
-            textViewName = (TextView) itemView.findViewById(R.id.textViewName);
             textViewDate= (TextView) itemView.findViewById(R.id.textViewDate);
             textViewTimeDuration= (TextView) itemView.findViewById(R.id.textViewTimeDuration);
-            tvTag = (TextView) itemView.findViewById(R.id.tvTag);
-            bEdit = (Button) itemView.findViewById(R.id.bEdit);
-            bDelete = (Button) itemView.findViewById(R.id.bDelete);
+            bEdit = (ImageButton) itemView.findViewById(R.id.bEdit);
+            bDelete = (ImageButton) itemView.findViewById(R.id.bDelete);
         }
     }
 }

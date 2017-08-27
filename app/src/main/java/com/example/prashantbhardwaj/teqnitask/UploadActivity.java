@@ -48,7 +48,6 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
     private Button bSelect;
     private ImageView ivPicture;
-    private EditText etPictureName;
     private EditText etTimeDuration;
     private Button bUpload;
     private Bitmap bitmap;
@@ -56,7 +55,6 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     private String KEY_IMAGE = "image";
     private String KEY_UPLOADER = "uploader";
     private String KEY_SESSIONNAME = "sessionname";
-    private String KEY_PICTURENAME = "picturename";
     private String KEY_TIMEDURATION = "timeduration";
     private String KEY_LEVEL1 = "level1";
     private String KEY_LEVEL2 = "level2";
@@ -74,7 +72,6 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         bSelect = (Button) findViewById(R.id.bSelect);
         bUpload = (Button) findViewById(R.id.bUpload);
         ivPicture = (ImageView) findViewById(R.id.ivPicture);
-        etPictureName = (EditText) findViewById(R.id.etPictureName);
         etTimeDuration = (EditText) findViewById(R.id.etTimeDuration);
 
         bSelect.setOnClickListener(this);
@@ -155,7 +152,6 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                 params.put(KEY_LEVEL1, getIntent().getExtras().get("level1").toString());
                 params.put(KEY_LEVEL2, getIntent().getExtras().get("level2").toString());
                 params.put(KEY_LEVEL3, getIntent().getExtras().get("level3").toString());
-                params.put(KEY_PICTURENAME, etPictureName.getText().toString());
                 params.put(KEY_SESSIONNAME, getIntent().getExtras().get("session").toString());
                 params.put(KEY_TIMEDURATION, etTimeDuration.getText().toString());
                 params.put(KEY_QRCODE, qrurl);
