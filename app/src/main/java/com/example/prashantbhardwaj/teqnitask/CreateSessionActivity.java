@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -121,8 +122,9 @@ public class CreateSessionActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        String[] level1List = level1opt.toString().split(",");
-        String[] level2List = level2opt.toString().split(",");
+        final String[] level1List = level1opt.toString().split(",");
+        final String[] level2List = level2opt.toString().split("_");
+      //  String[] level2ListSelect = level2List.toString().split(",");
         String[] level3List = level3opt.toString().split(",");
 
         tvLevel1.setText(level1);
@@ -133,9 +135,25 @@ public class CreateSessionActivity extends AppCompatActivity {
         spLevel1ArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
         spLevel1Opt.setAdapter(spLevel1ArrayAdapter);
 
-        ArrayAdapter<String> spLevel2ArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item, level2List);
-        spLevel2ArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
-        spLevel2Opt.setAdapter(spLevel2ArrayAdapter);
+        spLevel1Opt.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                for (int i = 0; i < level1List.length; i++){
+                    if (level1List[i].equals(String.valueOf(spLevel1Opt.getSelectedItem()))){
+                        String level2Arr = level2List[i];
+                        System.out.println(level2List[i]);
+                        String[] level2ListSelect = level2Arr.toString().split(",");
+                        ArrayAdapter<String> spLevel2ArrayAdapter = new ArrayAdapter<String>(CreateSessionActivity.this,   android.R.layout.simple_spinner_item, level2ListSelect);
+                        spLevel2ArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
+                        spLevel2Opt.setAdapter(spLevel2ArrayAdapter);
+                    }
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
 
         ArrayAdapter<String> spLevel3ArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item, level3List);
         spLevel3ArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
