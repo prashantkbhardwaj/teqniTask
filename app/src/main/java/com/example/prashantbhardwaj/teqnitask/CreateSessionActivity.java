@@ -52,6 +52,8 @@ public class CreateSessionActivity extends AppCompatActivity {
     private String KEY_LEVEL3 = "level3";
     private String KEY_SESSIONNAME = "sessionName";
     private String KEY_DESCRIPTION = "description";
+    private String level2Arr;
+    private String[] level2ListSelect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,8 +126,7 @@ public class CreateSessionActivity extends AppCompatActivity {
 
         final String[] level1List = level1opt.toString().split(",");
         final String[] level2List = level2opt.toString().split("_");
-      //  String[] level2ListSelect = level2List.toString().split(",");
-        String[] level3List = level3opt.toString().split(",");
+        final String[] level3List = level3opt.toString().split("/");
 
         tvLevel1.setText(level1);
         tvLevel2.setText(level2);
@@ -140,9 +141,8 @@ public class CreateSessionActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 for (int i = 0; i < level1List.length; i++){
                     if (level1List[i].equals(String.valueOf(spLevel1Opt.getSelectedItem()))){
-                        String level2Arr = level2List[i];
-                        System.out.println(level2List[i]);
-                        String[] level2ListSelect = level2Arr.toString().split(",");
+                        level2Arr = level2List[i];
+                        level2ListSelect = level2Arr.toString().split(",");
                         ArrayAdapter<String> spLevel2ArrayAdapter = new ArrayAdapter<String>(CreateSessionActivity.this,   android.R.layout.simple_spinner_item, level2ListSelect);
                         spLevel2ArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
                         spLevel2Opt.setAdapter(spLevel2ArrayAdapter);
@@ -155,9 +155,30 @@ public class CreateSessionActivity extends AppCompatActivity {
         });
 
 
-        ArrayAdapter<String> spLevel3ArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item, level3List);
-        spLevel3ArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
-        spLevel3Opt.setAdapter(spLevel3ArrayAdapter);
+        spLevel2Opt.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                for (int j = 0; j < level1List.length; j++){
+                    if (level1List[j].equals(String.valueOf(spLevel1Opt.getSelectedItem()))){
+                        String level3Arr = level3List[j];
+                        String[] level3Group = level3Arr.toString().split("_");
+                        for (int i = 0; i < level2ListSelect.length; i++){
+                            if (level2ListSelect[i].equals(String.valueOf(spLevel2Opt.getSelectedItem()))){
+                                String level3Final = level3Group[i];
+                                String[] level3ListSelect = level3Final.toString().split(",");
+                                ArrayAdapter<String> spLevel3ArrayAdapter = new ArrayAdapter<String>(CreateSessionActivity.this,   android.R.layout.simple_spinner_item, level3ListSelect);
+                                spLevel3ArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
+                                spLevel3Opt.setAdapter(spLevel3ArrayAdapter);
+                            }
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
 
     }
 
