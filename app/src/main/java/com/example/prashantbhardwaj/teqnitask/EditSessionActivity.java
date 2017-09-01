@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,6 +52,8 @@ public class EditSessionActivity extends AppCompatActivity {
     private String KEY_LEVEL3 = "level3";
     private String KEY_SESSIONNAME = "sessionName";
     private String KEY_OLDSESSION = "oldSession";
+    private String level2Arr;
+    private String[] level2ListSelect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,9 +125,9 @@ public class EditSessionActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        String[] level1List = level1opt.toString().split(",");
-        String[] level2List = level2opt.toString().split(",");
-        String[] level3List = level3opt.toString().split(",");
+        final String[] level1List = level1opt.toString().split(",");
+        final String[] level2List = level2opt.toString().split("_");
+        final String[] level3List = level3opt.toString().split("/");
 
         tvLevel1.setText(level1);
         tvLevel2.setText(level2);
@@ -139,23 +142,69 @@ public class EditSessionActivity extends AppCompatActivity {
             }
         }
 
-        ArrayAdapter<String> spLevel2ArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item, level2List);
-        spLevel2ArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
-        spLevel2Opt.setAdapter(spLevel2ArrayAdapter);
-        for (int i = 0; i < level2List.length; i++){
-            if (level2List[i].equals(getIntent().getExtras().get("level2").toString())){
-                spLevel2Opt.setSelection(i);
+        spLevel1Opt.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                for (int i = 0; i < level1List.length; i++){
+                    if (level1List[i].equals(String.valueOf(spLevel1Opt.getSelectedItem()))){
+                        level2Arr = level2List[i];
+                        level2ListSelect = level2Arr.toString().split(",");
+                        ArrayAdapter<String> spLevel2ArrayAdapter = new ArrayAdapter<String>(EditSessionActivity.this,   android.R.layout.simple_spinner_item, level2ListSelect);
+                        spLevel2ArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
+                        spLevel2Opt.setAdapter(spLevel2ArrayAdapter);
+                        spLevel2Opt.setSelection(i);
+                    }
+                }
             }
-        }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
-        ArrayAdapter<String> spLevel3ArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item, level3List);
-        spLevel3ArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
-        spLevel3Opt.setAdapter(spLevel3ArrayAdapter);
-        for (int i = 0; i < level3List.length; i++){
-            if (level3List[i].equals(getIntent().getExtras().get("level3").toString())){
-                spLevel3Opt.setSelection(i);
+
+        spLevel2Opt.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                for (int j = 0; j < level1List.length; j++){
+                    if (level1List[j].equals(String.valueOf(spLevel1Opt.getSelectedItem()))){
+                        String level3Arr = level3List[j];
+                        String[] level3Group = level3Arr.toString().split("_");
+                        for (int i = 0; i < level2ListSelect.length; i++){
+                            if (level2ListSelect[i].equals(String.valueOf(spLevel2Opt.getSelectedItem()))){
+                                String level3Final = level3Group[i];
+                                String[] level3ListSelect = level3Final.toString().split(",");
+                                ArrayAdapter<String> spLevel3ArrayAdapter = new ArrayAdapter<String>(EditSessionActivity.this,   android.R.layout.simple_spinner_item, level3ListSelect);
+                                spLevel3ArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
+                                spLevel3Opt.setAdapter(spLevel3ArrayAdapter);
+                                spLevel3Opt.setSelection(i);
+                            }
+                        }
+                    }
+                }
             }
-        }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+
+//        ArrayAdapter<String> spLevel2ArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item, level2List);
+//        spLevel2ArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
+//        spLevel2Opt.setAdapter(spLevel2ArrayAdapter);
+//        for (int i = 0; i < level2List.length; i++){
+//            if (level2List[i].equals(getIntent().getExtras().get("level2").toString())){
+//                spLevel2Opt.setSelection(i);
+//            }
+//        }
+//
+//        ArrayAdapter<String> spLevel3ArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item, level3List);
+//        spLevel3ArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
+//        spLevel3Opt.setAdapter(spLevel3ArrayAdapter);
+//        for (int i = 0; i < level3List.length; i++){
+//            if (level3List[i].equals(getIntent().getExtras().get("level3").toString())){
+//                spLevel3Opt.setSelection(i);
+//            }
+//        }
 
     }
 
