@@ -32,6 +32,7 @@ public class EditSessionActivity extends AppCompatActivity {
 
     private String sessionName;
     private EditText etSessionName;
+    private EditText etDescription;
     private TextView tvLevel1;
     private TextView tvLevel2;
     private TextView tvLevel3;
@@ -52,6 +53,7 @@ public class EditSessionActivity extends AppCompatActivity {
     private String KEY_LEVEL3 = "level3";
     private String KEY_SESSIONNAME = "sessionName";
     private String KEY_OLDSESSION = "oldSession";
+    private String KEY_DESCRIPTION = "description";
     private String level2Arr;
     private String[] level2ListSelect;
 
@@ -62,6 +64,7 @@ public class EditSessionActivity extends AppCompatActivity {
 
         sessionName = getIntent().getExtras().get("session").toString();
         etSessionName = (EditText) findViewById(R.id.etSessionNameU);
+        etDescription = (EditText) findViewById(R.id.etDesciption);
         tvLevel1 = (TextView) findViewById(R.id.tvLevel1U);
         tvLevel2 = (TextView) findViewById(R.id.tvLevel2U);
         tvLevel3 = (TextView) findViewById(R.id.tvLevel3U);
@@ -70,6 +73,7 @@ public class EditSessionActivity extends AppCompatActivity {
         spLevel3Opt = (Spinner) findViewById(R.id.spLevel3OptU);
         bEditSession = (Button) findViewById(R.id.bEditSession);
         etSessionName.setText(sessionName);
+        etDescription.setText(getIntent().getExtras().get("description").toString());
 
         getData();
 
@@ -188,24 +192,6 @@ public class EditSessionActivity extends AppCompatActivity {
         });
 
 
-//        ArrayAdapter<String> spLevel2ArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item, level2List);
-//        spLevel2ArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
-//        spLevel2Opt.setAdapter(spLevel2ArrayAdapter);
-//        for (int i = 0; i < level2List.length; i++){
-//            if (level2List[i].equals(getIntent().getExtras().get("level2").toString())){
-//                spLevel2Opt.setSelection(i);
-//            }
-//        }
-//
-//        ArrayAdapter<String> spLevel3ArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item, level3List);
-//        spLevel3ArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
-//        spLevel3Opt.setAdapter(spLevel3ArrayAdapter);
-//        for (int i = 0; i < level3List.length; i++){
-//            if (level3List[i].equals(getIntent().getExtras().get("level3").toString())){
-//                spLevel3Opt.setSelection(i);
-//            }
-//        }
-
     }
 
     private void updateSession(){
@@ -252,6 +238,7 @@ public class EditSessionActivity extends AppCompatActivity {
                 params.put(KEY_LEVEL2, String.valueOf(spLevel2Opt.getSelectedItem()));
                 params.put(KEY_LEVEL3, String.valueOf(spLevel3Opt.getSelectedItem()));
                 params.put(KEY_SESSIONNAME, etSessionName.getText().toString());
+                params.put(KEY_DESCRIPTION, etDescription.getText().toString());
                 params.put(KEY_OLDSESSION, getIntent().getExtras().get("session").toString());
 
                 //returning parameters

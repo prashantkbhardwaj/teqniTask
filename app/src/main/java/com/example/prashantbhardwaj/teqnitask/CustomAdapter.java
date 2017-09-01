@@ -74,12 +74,14 @@ public class CustomAdapter extends ArrayAdapter<DataModel> implements View.OnCli
                                 final String level1 = jsonResponse.getString("level1");
                                 final String level2 = jsonResponse.getString("level2");
                                 final String level3 = jsonResponse.getString("level3");
+                                final String description = jsonResponse.getString("description");
 
                                 Intent i = new Intent(mContext, EditSessionActivity.class);
                                 i.putExtra("session", dataModel.getName().toString());
                                 i.putExtra("level1", level1);
                                 i.putExtra("level2", level2);
                                 i.putExtra("level3", level3);
+                                i.putExtra("description", description);
                                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 mContext.startActivity(i);

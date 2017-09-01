@@ -64,8 +64,6 @@ public class DataActivity extends AppCompatActivity {
 
         tvSessionView.setText(getIntent().getExtras().get("sess").toString());
 
-       // System.out.println(getIntent().getExtras().get("sess").toString());
-
         //Initializing our superheroes list
         listSuperHeroes = new ArrayList<>();
 

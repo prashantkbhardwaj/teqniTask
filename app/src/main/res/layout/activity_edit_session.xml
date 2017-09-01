@@ -33,12 +33,13 @@
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="74dp"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp" />
+        android:layout_marginRight="15dp"
+        app:layout_constraintHorizontal_bias="0.0" />
 
     <TextView
         android:id="@+id/textView8"
@@ -61,13 +62,14 @@
         android:layout_marginLeft="17dp"
         android:layout_marginRight="17dp"
         android:layout_marginStart="17dp"
-        android:layout_marginTop="49dp"
+        android:layout_marginTop="94dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etSessionNameU"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1" />
+        tools:layout_constraintTop_creator="1"
+        app:layout_constraintHorizontal_bias="0.0" />
 
     <TextView
         android:id="@+id/tvLevel1U"
@@ -113,12 +115,12 @@
         android:id="@+id/spLevel3OptU"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="90dp"
+        android:layout_marginBottom="80dp"
         android:layout_marginEnd="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="81dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -155,5 +157,27 @@
         tools:layout_constraintBottom_creator="1"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1" />
+
+    <EditText
+        android:id="@+id/etDesciption"
+        android:layout_width="0dp"
+        android:layout_height="54dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Description"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/spLevel1OptU"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="77dp"
+        tools:layout_constraintLeft_creator="1"
+        android:layout_marginBottom="79dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView8"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp" />
 
 </android.support.constraint.ConstraintLayout>
